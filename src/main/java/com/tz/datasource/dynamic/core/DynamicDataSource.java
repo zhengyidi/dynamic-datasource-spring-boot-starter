@@ -6,6 +6,7 @@ import org.springframework.jdbc.datasource.AbstractDataSource;
 import javax.sql.DataSource;
 import java.io.Closeable;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -57,7 +58,7 @@ public class DynamicDataSource extends AbstractDataSource implements Closeable {
     public void close() {
         Class<? extends DataSource> clazz = dataSource.getClass();
         try {
-            var closeMethod = clazz.getDeclaredMethod("close");
+            Method closeMethod = clazz.getDeclaredMethod("close");
             closeMethod.invoke(dataSource);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             log.warn("Close the datasource named [{}] failed,", this.lookupKey, e);

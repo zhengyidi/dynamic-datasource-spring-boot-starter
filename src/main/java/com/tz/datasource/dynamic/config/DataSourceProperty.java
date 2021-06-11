@@ -5,12 +5,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.util.StringUtils;
 
-import java.util.Map;
-
 /**
- * 数据源配置信息
- *
- * @author zheng
+ * 多数据源信息
  */
 public class DataSourceProperty extends DataSourceProperties {
 
@@ -23,46 +19,13 @@ public class DataSourceProperty extends DataSourceProperties {
     @NestedConfigurationProperty
     private DruidConfig druid;
 
-    /**
-     * 动态切换数据源
-     * <pre>
-     *     读取spring.datasource.dynamic 下的数据信息
-     * </pre>
-     */
-    @NestedConfigurationProperty
-    private Map<String, DataSourceProperty> dynamic;
-
-    /**
-     * 设置动态数据源切换的切点
-     * <pre>
-     *     读取spring.datasource.pointcut 值
-     * </pre>
-     */
-    @NestedConfigurationProperty
-    private String pointcut;
 
     public DruidConfig getDruid() {
-        return druid == null ? new DruidConfig() : druid;
+        return druid;
     }
 
     public void setDruid(DruidConfig druid) {
         this.druid = druid;
-    }
-
-    public Map<String, DataSourceProperty> getDynamic() {
-        return dynamic;
-    }
-
-    public void setDynamic(Map<String, DataSourceProperty> dynamic) {
-        this.dynamic = dynamic;
-    }
-
-    public String getPointcut() {
-        return pointcut;
-    }
-
-    public void setPointcut(String pointcut) {
-        this.pointcut = pointcut;
     }
 
     /**
@@ -76,5 +39,4 @@ public class DataSourceProperty extends DataSourceProperties {
                 StringUtils.hasText(getPassword()) &&
                 StringUtils.hasText(getDriverClassName());
     }
-
 }

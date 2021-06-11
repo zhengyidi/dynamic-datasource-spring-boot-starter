@@ -57,7 +57,7 @@ public class DruidDataSourceCreator {
     }
 
     public DataSource createDataSource(DataSourceProperty dataSourceProperty) {
-        var dataSource = new DruidDataSource();
+        DruidDataSource dataSource = new DruidDataSource();
         dataSource.setUsername(dataSourceProperty.getUsername());
         dataSource.setPassword(dataSourceProperty.getPassword());
         dataSource.setUrl(dataSourceProperty.getUrl());
@@ -87,26 +87,26 @@ public class DruidDataSourceCreator {
     }
 
     private List<Filter> initFilters(DataSourceProperty dataSourceProperty, Properties properties) {
-        final var statFilterName = "stat";
-        final var wallFilterName = "wall";
-        final var slf4jFilterName = "slf4j";
+        final String statFilterName = "stat";
+        final String wallFilterName = "wall";
+        final String slf4jFilterName = "slf4j";
 
         List<Filter> proxyFilters = new ArrayList<>(2);
         String filters = properties.getProperty("druid.filters");
         if (!StringUtils.isEmpty(filters)) {
             if (filters.contains(statFilterName)) {
-                var statFilter = new StatFilter();
+                StatFilter statFilter = new StatFilter();
                 statFilter.configFromProperties(properties);
                 proxyFilters.add(statFilter);
             }
             if (filters.contains(wallFilterName)) {
                 WallConfig wallConfig = DruidWallConfigUtil.toWallConfig(dataSourceProperty.getDruid().getWall(), defaultDruidConfig.getWall());
-                var wallFilter = new WallFilter();
+                WallFilter wallFilter = new WallFilter();
                 wallFilter.setConfig(wallConfig);
                 proxyFilters.add(wallFilter);
             }
             if (filters.contains(slf4jFilterName)) {
-                var slf4jLogFilter = new Slf4jLogFilter();
+                Slf4jLogFilter slf4jLogFilter = new Slf4jLogFilter();
                 // 由于properties上面被用了，LogFilter不能使用configFromProperties方法，这里只能一个个set了。
                 DruidSlf4jConfig slf4jConfig = defaultDruidConfig.getSlf4j();
                 slf4jLogFilter.setStatementLogEnabled(slf4jConfig.getEnable());
