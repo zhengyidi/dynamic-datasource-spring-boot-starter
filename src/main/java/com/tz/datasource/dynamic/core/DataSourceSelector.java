@@ -19,10 +19,6 @@ public class DataSourceSelector {
      * @throws DataSourceNotExistsException 当未找到数据源时抛出
      */
     public static void selectDataSource(String dataSourceKey) {
-//        String currentDataSourceKey = DynamicDataSourceContextHolder.getDataSourceKey();
-//        if (currentDataSourceKey != null) {
-//            throw new IllegalStateException(String.format("%s Current dataSource is %s, could not change dataSource second time in pointcut method.", DynamicDataSourceConstants.LOG_PREFIX, dataSourceKey));
-//        }
         // check dataSource key exists
         DynamicRoutingDataSource dataSource = SpringUtil.getBean("dataSource", DynamicRoutingDataSource.class);
         boolean dataSourceExists = dataSource.getResolvedDataSources().containsKey(dataSourceKey);
