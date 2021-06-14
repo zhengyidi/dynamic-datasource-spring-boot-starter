@@ -21,7 +21,7 @@ public class DataSourceProperty extends DataSourceProperties {
 
 
     public DruidConfig getDruid() {
-        return druid;
+        return druid == null ? new DruidConfig() : druid;
     }
 
     public void setDruid(DruidConfig druid) {

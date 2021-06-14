@@ -8,7 +8,7 @@ package com.tz.datasource.dynamic.route;
  *
  * @author zheng
  */
-public interface DynamicDatasourceRoute {
+public interface DynamicDataSourceRoute {
 
     String NAME = "com.tz.datasource.dynamic.route.DynamicDatasourceRoute";
 

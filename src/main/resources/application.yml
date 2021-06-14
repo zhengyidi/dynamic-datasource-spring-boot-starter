@@ -2,5 +2,38 @@
 spring:
   application:
     name: dynamic-datasource-spring-boot-starter
-
-
+  datasource:
+    url: jdbc:mysql://192.168.4.4:3306/aaa?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      filters: stat,wall
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico
+        session-stat-enable: true
+        session-stat-max-count: 10
+        principal-session-name: session_name
+        principal-cookie-name: cookie_name
+        # StatViewServlet配置，说明请参考Druid Wiki，配置_StatViewServlet配置默认false
+      stat-view-servlet:
+        enabled: true
+        # 配置DruidStatViewServlet
+        url-pattern: /druid/*
+        #  禁用HTML页面上的“Reset All”功能
+        reset-enable: false
+        #监控页面登录的用户名
+        login-username: admin
+        #监控页面登录的密码
+        login-password: 123456
+    dynamic:
+      enable: true
+      #      pointcut: "test"
+      data-sources:
+        testdb:
+          url: jdbc:mysql://192.168.4.4:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver

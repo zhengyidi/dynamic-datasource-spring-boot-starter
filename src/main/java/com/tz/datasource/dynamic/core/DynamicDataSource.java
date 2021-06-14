@@ -61,7 +61,7 @@ public class DynamicDataSource extends AbstractDataSource implements Closeable {
             Method closeMethod = clazz.getDeclaredMethod("close");
             closeMethod.invoke(dataSource);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            log.warn("Close the datasource named [{}] failed,", this.lookupKey, e);
+            log.warn("{} Close the datasource named [{}] failed,", DynamicDataSourceConstants.LOG_PREFIX, this.lookupKey, e);
         }
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  *                username: ...
  * </pre>
  */
-@ConfigurationProperties(prefix = "spring.datasource")
+//@ConfigurationProperties(prefix = "spring.datasource")
 public class DataSourcePropertiesWrapper extends DataSourceProperty {
 
     @NestedConfigurationProperty

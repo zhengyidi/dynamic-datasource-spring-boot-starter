@@ -20,7 +20,7 @@ public class DynamicDataSourceContextHolder {
      *
      * @param key 数据源key
      */
-    public static void setDataSourceKey(String key) {
+    static void setDataSourceKey(String key) {
         CONTEXT_HOLDER.set(key);
     }
 
@@ -29,14 +29,14 @@ public class DynamicDataSourceContextHolder {
      *
      * @return 获取当前线程的数据源key
      */
-    public static String getDataSourceKey() {
+    static String getDataSourceKey() {
         return CONTEXT_HOLDER.get();
     }
 
     /**
      * To set DataSource as default
      */
-    public static void clearDataSourceKey() {
+    static void clearDataSourceKey() {
         CONTEXT_HOLDER.remove();
     }
 }

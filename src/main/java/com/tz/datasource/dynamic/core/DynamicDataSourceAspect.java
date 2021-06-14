@@ -1,6 +1,6 @@
 package com.tz.datasource.dynamic.core;
 
-import com.tz.datasource.dynamic.route.DynamicDatasourceRoute;
+import com.tz.datasource.dynamic.route.DynamicDataSourceRoute;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
@@ -17,9 +17,9 @@ public class DynamicDataSourceAspect implements MethodInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(DynamicDataSourceAspect.class);
 
-    private final DynamicDatasourceRoute datasourceRoute;
+    private final DynamicDataSourceRoute datasourceRoute;
 
-    public DynamicDataSourceAspect(DynamicDatasourceRoute datasourceRoute) {
+    public DynamicDataSourceAspect(DynamicDataSourceRoute datasourceRoute) {
         this.datasourceRoute = datasourceRoute;
     }
 
@@ -40,7 +40,7 @@ public class DynamicDataSourceAspect implements MethodInterceptor {
         String datasourceRouteKey = datasourceRoute.getDatasourceRouteKey();
         DynamicDataSourceContextHolder.setDataSourceKey(datasourceRouteKey);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Change DataSource to [{}] in Method [{}].", datasourceRouteKey, method);
+            LOG.debug("{} Change DataSource to [{}] in Method [{}].", DynamicDataSourceConstants.LOG_PREFIX, datasourceRouteKey, method);
         }
     }
 
@@ -52,7 +52,7 @@ public class DynamicDataSourceAspect implements MethodInterceptor {
     public void after(Method method) {
         DynamicDataSourceContextHolder.clearDataSourceKey();
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Restore DataSource to [{}] in Method [{}]", DynamicDataSourceContextHolder.getDataSourceKey(), method.getName());
+            LOG.debug("{} Restore DataSource to [{}] in Method [{}]", DynamicDataSourceConstants.LOG_PREFIX, DynamicDataSourceContextHolder.getDataSourceKey(), method.getName());
         }
     }
 }

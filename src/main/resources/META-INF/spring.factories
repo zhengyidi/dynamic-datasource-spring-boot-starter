@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.tz.datasource.dynamic.config.DynamicDataSourceAutoConfig,\
+  com.tz.datasource.dynamic.config.DynamicDataSourceLoader,\
+  com.tz.datasource.dynamic.config.reader.PropertiesDataSourceReader
+org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
+  com.tz.datasource.dynamic.config.AutoConfigurationFilter

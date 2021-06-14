@@ -1,5 +1,6 @@
 package com.tz.datasource.dynamic.core;
 
+import com.tz.datasource.dynamic.exception.DataSourceNotExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.AbstractDataSource;
 import org.springframework.lang.Nullable;
@@ -52,9 +53,9 @@ public class DynamicRoutingDataSource extends AbstractDataSource {
         if (lookupKey == null) {
             return this.resolvedDefaultDataSource;
         }
-        DataSource dataSource = this.resolvedDataSources.getOrDefault(lookupKey, this.resolvedDefaultDataSource);
+        DataSource dataSource = this.resolvedDataSources.get(lookupKey);
         if (dataSource == null) {
-            throw new IllegalStateException("Cannot determine target DataSource for name [" + lookupKey + "].");
+            throw new DataSourceNotExistsException(DynamicDataSourceConstants.LOG_PREFIX + " Cannot determine target DataSource for name [" + lookupKey + "].");
         }
         return dataSource;
     }
@@ -73,10 +74,20 @@ public class DynamicRoutingDataSource extends AbstractDataSource {
         return Collections.unmodifiableMap(this.resolvedDataSources);
     }
 
+    /**
+     * 获取默认数据源信息
+     *
+     * @return 默认数据源
+     */
     public DataSource getResolvedDefaultDataSource() {
         return resolvedDefaultDataSource;
     }
 
+    /**
+     * 设置默认数据源
+     *
+     * @param resolvedDefaultDataSource 默认数据源
+     */
     public void setResolvedDefaultDataSource(DataSource resolvedDefaultDataSource) {
         this.resolvedDefaultDataSource = resolveDataSource(DEFAULT_DATASOURCE_NAME, resolvedDefaultDataSource);
     }
@@ -93,7 +104,7 @@ public class DynamicRoutingDataSource extends AbstractDataSource {
         DynamicDataSource oldDataSource = this.resolvedDataSources.put(name, source);
         // 清除旧数据源信息
         disconnectDataSource(oldDataSource);
-        log.info("DataSource [{}] added success.", name);
+        log.info("{} DataSource [{}] added success.", DynamicDataSourceConstants.LOG_PREFIX, name);
     }
 
     /**
@@ -104,17 +115,29 @@ public class DynamicRoutingDataSource extends AbstractDataSource {
     public synchronized void removeDataSource(Object name) {
         DynamicDataSource dataSource = this.resolvedDataSources.get(name);
         if (dataSource == null) {
-            log.warn("Could not find DataSource {} while removed DataSource.", name);
+            log.warn("{} Could not find DataSource [{}] while remove DataSource.", DynamicDataSourceConstants.LOG_PREFIX, name);
             return;
         }
         disconnectDataSource(dataSource);
-        log.info("DataSource [{}] removed success.", name);
+        log.info("{} DataSource [{}] removed success.", DynamicDataSourceConstants.LOG_PREFIX, name);
     }
 
+    /**
+     * 转换处理数据源
+     *
+     * @param name       数据源key
+     * @param dataSource 数据源
+     * @return 动态数据源
+     */
     private DynamicDataSource resolveDataSource(Object name, DataSource dataSource) {
         return new DynamicDataSource(name, dataSource);
     }
 
+    /**
+     * 关闭数据源
+     *
+     * @param dataSource 数据源
+     */
     private void disconnectDataSource(DynamicDataSource dataSource) {
         if (dataSource != null) {
             dataSource.close();
