@@ -37,7 +37,7 @@ public class DynamicDataSourceAspect implements MethodInterceptor {
      * @param method 切面方法
      */
     public void before(Method method) {
-        String datasourceRouteKey = datasourceRoute.getDatasourceRouteKey();
+        Object datasourceRouteKey = datasourceRoute.getDatasourceRouteKey();
         DynamicDataSourceContextHolder.setDataSourceKey(datasourceRouteKey);
         if (LOG.isDebugEnabled()) {
             LOG.debug("{} Change DataSource to [{}] in Method [{}].", DynamicDataSourceConstants.LOG_PREFIX, datasourceRouteKey, method);

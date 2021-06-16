@@ -13,14 +13,14 @@ public class DynamicDataSourceContextHolder {
     /**
      * 线程私有容器，存储当前线程的数据源key
      */
-    private static final ThreadLocal<String> CONTEXT_HOLDER = new ThreadLocal<>();
+    private static final ThreadLocal<Object> CONTEXT_HOLDER = new ThreadLocal<>();
 
     /**
      * 选择当前的数据源
      *
      * @param key 数据源key
      */
-    static void setDataSourceKey(String key) {
+    static void setDataSourceKey(Object key) {
         CONTEXT_HOLDER.set(key);
     }
 
@@ -29,7 +29,7 @@ public class DynamicDataSourceContextHolder {
      *
      * @return 获取当前线程的数据源key
      */
-    static String getDataSourceKey() {
+    static Object getDataSourceKey() {
         return CONTEXT_HOLDER.get();
     }
 

@@ -17,6 +17,6 @@ public interface DynamicDataSourceRoute {
      *
      * @return 数据源的key [default, 或配置在spring.datasource.dynamic下的key]
      */
-    String getDatasourceRouteKey();
+    Object getDatasourceRouteKey();
 
 }

@@ -18,7 +18,7 @@ public class DataSourceSelector {
      * @param dataSourceKey 数据源key
      * @throws DataSourceNotExistsException 当未找到数据源时抛出
      */
-    public static void selectDataSource(String dataSourceKey) {
+    public static void selectDataSource(Object dataSourceKey) {
         // check dataSource key exists
         DynamicRoutingDataSource dataSource = SpringUtil.getBean("dataSource", DynamicRoutingDataSource.class);
         boolean dataSourceExists = dataSource.getResolvedDataSources().containsKey(dataSourceKey);

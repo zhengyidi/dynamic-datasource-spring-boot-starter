@@ -1,47 +1,39 @@
-package com.tz.datasource.dynamic.config;
+package com.tz.datasource.dynamic.core;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.tz.datasource.dynamic.config.DataSourcePropertiesWrapper;
+import com.tz.datasource.dynamic.config.DataSourceProperty;
+import com.tz.datasource.dynamic.config.SpringDataSourceWrapper;
 import com.tz.datasource.dynamic.config.druid.DruidConfig;
 import com.tz.datasource.dynamic.config.druid.DruidDataSourceCreator;
-import com.tz.datasource.dynamic.core.DynamicDataSourceAspect;
-import com.tz.datasource.dynamic.core.DynamicDataSourceConstants;
-import com.tz.datasource.dynamic.core.DynamicRoutingDataSource;
-import com.tz.datasource.dynamic.core.SpringUtil;
 import com.tz.datasource.dynamic.route.DynamicDataSourceRoute;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.TransactionManager;
 
 import javax.sql.DataSource;
 
 /**
  * 动态数据源自动配置类
  */
+@Slf4j
+@Configuration
+@Import(SpringUtil.class)
 @ConditionalOnProperty(value = DynamicDataSourceConstants.ENABLE_CONFIG, havingValue = "true")
 @AutoConfigureBefore(value = DruidDataSourceAutoConfigure.class, name = "com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure")
 @EnableConfigurationProperties(SpringDataSourceWrapper.class)
-@ImportAutoConfiguration(exclude = DataSourceTransactionManagerAutoConfiguration.class)
-@Configuration
-@Import(SpringUtil.class)
-@Slf4j
 public class DynamicDataSourceAutoConfig {
 
     private final DataSourcePropertiesWrapper dataSourceProperties;
@@ -79,18 +71,6 @@ public class DynamicDataSourceAutoConfig {
         //如果是不同类型的库，请不要指定DbType，其会自动判断。
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return interceptor;
-    }
-
-    /**
-     * 事务管理器
-     *
-     * @return 事务管理器
-     */
-    @Bean
-    public TransactionManager transactionManager(ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource());
-        transactionManagerCustomizers.ifAvailable(customizers -> customizers.customize(transactionManager));
-        return transactionManager;
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.tz.datasource.dynamic.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
